@@ -67,6 +67,7 @@ function Courses() {
   ];
 
   const query = search.trim().toLowerCase();
+  const totalCredits = courses.reduce((total, course) => total + course.credits, 0);
   const filteredCourses = courses.filter((course) =>
     `${course.name} ${course.faculty}`.toLowerCase().includes(query)
   );
@@ -76,25 +77,33 @@ function Courses() {
       <AppSidebar />
 
       <SidebarInset>
-        <div className="min-h-screen bg-gradient-to-br from-white via-blue-50 to-blue-100 p-6">
+        <div className="min-h-screen bg-gradient-to-br from-white via-indigo-50 to-blue-100 p-4 sm:p-6">
 
           {/* Header */}
- <PageHeader
-  title="Courses"
-  subtitle="Your enrolled courses"
-/>
+          <PageHeader
+            title="My Learning Hub"
+            subtitle="Keep your courses and progress in one place"
+          />
 
           {/* Hero Card */}
 
-          <Card className="rounded-3xl border-0 shadow-lg mb-8 bg-gradient-to-r from-blue-700 to-blue-500 text-white">
+          <Card className="rounded-3xl border-0 shadow-lg mb-8 bg-gradient-to-r from-indigo-700 via-blue-600 to-cyan-500 text-white">
             <CardContent className="p-6">
               <h2 className="text-3xl font-bold">
                 {courses.length} Active Courses
               </h2>
 
               <p className="mt-2 text-blue-100">
-                Track progress, credits and faculty information.
+                A little progress every day adds up. Keep learning!
               </p>
+              <div className="mt-4 flex flex-wrap gap-2 text-sm font-medium">
+                <span className="rounded-full bg-white/20 px-3 py-1">
+                  {totalCredits} total credits
+                </span>
+                <span className="rounded-full bg-white/20 px-3 py-1">
+                  Semester in progress
+                </span>
+              </div>
             </CardContent>
           </Card>
 
@@ -144,7 +153,10 @@ function Courses() {
                   border-0
                   shadow-md
                   hover:shadow-xl
+                  hover:-translate-y-1
+                  motion-reduce:transform-none
                   transition-all
+                  duration-200
                 "
               >
                 <CardHeader>
@@ -185,7 +197,7 @@ function Courses() {
 
                   <div className="flex items-center gap-2 text-sm text-slate-500">
                     <Clock className="h-4 w-4" />
-                    Semester Ongoing
+                    Keep up the momentum
                   </div>
 
                 </CardContent>
