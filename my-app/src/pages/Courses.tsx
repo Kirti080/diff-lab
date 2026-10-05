@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppSidebar } from "@/components/AppSidebar";
 import { PageHeader } from "@/components/PageHeader";
 
@@ -15,6 +16,8 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 import {
   BookOpen,
@@ -23,6 +26,7 @@ import {
 } from "lucide-react";
 
 function Courses() {
+  const [search, setSearch] = useState("");
   const courses = [
     {
       name: "Operating Systems",
@@ -62,6 +66,11 @@ function Courses() {
     },
   ];
 
+  const query = search.trim().toLowerCase();
+  const filteredCourses = courses.filter((course) =>
+    `${course.name} ${course.faculty}`.toLowerCase().includes(query)
+  );
+
   return (
     <SidebarProvider defaultOpen>
       <AppSidebar />
@@ -72,7 +81,7 @@ function Courses() {
           {/* Header */}
  <PageHeader
   title="Courses"
-  subtitle="Courses you have Enrolled"
+  subtitle="Your enrolled courses"
 />
 
           {/* Hero Card */}
@@ -80,7 +89,7 @@ function Courses() {
           <Card className="rounded-3xl border-0 shadow-lg mb-8 bg-gradient-to-r from-blue-700 to-blue-500 text-white">
             <CardContent className="p-6">
               <h2 className="text-3xl font-bold">
-                6 Active Courses
+                {courses.length} Active Courses
               </h2>
 
               <p className="mt-2 text-blue-100">
@@ -89,10 +98,45 @@ function Courses() {
             </CardContent>
           </Card>
 
+          <div className="mb-6 space-y-2">
+            <label htmlFor="course-search" className="text-sm font-medium">
+              Search courses
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <Input
+                id="course-search"
+                type="search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search by course or faculty name"
+                className="min-w-0 flex-1 basis-64 bg-white"
+              />
+              {search && (
+                <Button variant="outline" onClick={() => setSearch("")}>
+                  Clear search
+                </Button>
+              )}
+            </div>
+            <p role="status" className="text-sm text-slate-600">
+              Showing {filteredCourses.length} of {courses.length} courses
+            </p>
+          </div>
+
+          {filteredCourses.length === 0 && (
+            <Card className="rounded-3xl border-0 text-center shadow-md">
+              <CardContent className="p-8">
+                <h2 className="text-lg font-semibold">No courses found</h2>
+                <p className="mt-2 text-sm text-slate-600">
+                  Try a different course or faculty name, or clear your search to see all courses.
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Courses Grid */}
 
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {courses.map((course) => (
+            {filteredCourses.map((course) => (
               <Card
                 key={course.name}
                 className="
